@@ -31,8 +31,7 @@
     .then((response) => {   
         data.value = response.data.data;
         houseCode.value = response.data.data[0].houseCode;
-        hasInstaller.value = response.data.data.installer != '';
-        console.log(hasInstaller.value);
+        hasInstaller.value = response.data.data[0].installer != null;
     })
 
     axios.get('/api/v1/pictures?houseId=' + props.houseId.toString() + '&type=H')
@@ -46,7 +45,6 @@
     axios.get('/api/v1/pictures?houseId=' + props.houseId.toString() + '&type=D')
     .then((response) => {
       hasSolution.value = response.data.data.length > 0;
-      console.log(hasSolution.value)
     })
     .catch((error) => {
       console.log(error);
