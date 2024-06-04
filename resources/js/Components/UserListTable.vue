@@ -1,6 +1,6 @@
 <script setup>
     import TableLite from 'vue3-table-lite';
-    import { reactive, ref, watch  } from 'vue';
+    import { reactive, ref, watch, onMounted  } from 'vue';
     import axios from 'axios';
     import AddUser from '@/Components/AddUser.vue';
     import EditUser from '@/Components/UserEditLightBox.vue';
@@ -9,6 +9,15 @@
     const newUsertLightBoxDisplay = ref(false);
     const userEditLightBoxDisplay= ref(false);
     const editUserId = ref();
+
+    onMounted(() => {
+        const elements = document.querySelectorAll('.vtl-table');
+
+        elements.forEach(element => {
+            element.classList.remove('vtl-table-responsive-sm', 'vtl-table-responsive');
+        });
+
+    });
 
     function toggleLightBox(){
         newUsertLightBoxDisplay.value = ! newUsertLightBoxDisplay.value;

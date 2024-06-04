@@ -40,6 +40,7 @@ class StoreProjectRequest extends FormRequest
             'zef' => ['sometimes', 'nullable'],
             'zrh' => ['sometimes', 'nullable'],
             'notes' => ['sometimes', 'nullable'],
+            'currency'=> ['sometimes', 'nullable']
         ];
     }
 

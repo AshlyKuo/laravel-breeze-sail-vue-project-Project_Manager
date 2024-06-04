@@ -40,7 +40,8 @@ class Project extends Model
         'ffu',
         'zef',
         'zrh',
-        'notes'
+        'notes',
+        'currency'
     ];
 
     /**

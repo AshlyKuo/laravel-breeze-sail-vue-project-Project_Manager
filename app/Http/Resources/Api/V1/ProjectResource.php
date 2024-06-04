@@ -33,7 +33,8 @@ class ProjectResource extends JsonResource
             'ffu' => $this->ffu,
             'zef' => $this->zef,
             'zrh' => $this->zrh,
-            'notes' => $this->notes
+            'notes' => $this->notes,
+            'currency'=> $this->currency
         ];
     }
 }

@@ -1,5 +1,5 @@
 <script setup>
-  import { defineProps, onBeforeMount, ref } from 'vue';
+  import { defineProps, onBeforeMount, ref, onMounted } from 'vue';
   import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
   import axios from 'axios';
   import AddInstallerLightBox from '@/Components/AddInstallerLightBox.vue';
@@ -20,6 +20,10 @@
   const uploadSolutionLightBoxDisplay = ref(false);
   const data = ref();
   const houseCode = ref();
+  const hasInstaller = ref(false);
+  const hasPictures = ref(false);
+  const hasInformatoin = ref(false);
+  const hasSolution = ref(false);
 
   onBeforeMount(() => {
     let url = '/api/v1/projects?houseId='+ props.houseId.toString();
@@ -27,7 +31,41 @@
     .then((response) => {   
         data.value = response.data.data;
         houseCode.value = response.data.data[0].houseCode;
+        hasInstaller.value = response.data.data.installer != '';
+        console.log(hasInstaller.value);
     })
+
+    axios.get('/api/v1/pictures?houseId=' + props.houseId.toString() + '&type=H')
+    .then((response) => {
+      hasPictures.value = response.data.data.length > 0;
+    })
+    .catch((error)=>{
+      console.log(error);
+    });
+
+    axios.get('/api/v1/pictures?houseId=' + props.houseId.toString() + '&type=D')
+    .then((response) => {
+      hasSolution.value = response.data.data.length > 0;
+      console.log(hasSolution.value)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    axios.get('https://api.addwii.com/api/v1/management/houses/' + props.houseId.toString() + '/rooms', {
+                headers: {
+                    "Content-Type": 'application/json', 
+                    "Accept": 'application/json',
+                    'Authorization': `Bearer ${import.meta.env.VITE_API_AUTH_TOKEN}`
+                }} 
+    )
+    .then((response) => {
+      hasInformatoin.value = response.data.data.length;
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+
   });
 
   function toggleAddInstallerLightBox(){
@@ -58,6 +96,11 @@
   function closeUploadSolutionLightBox(value){
     uploadSolutionLightBoxDisplay.value = value;
   };
+
+  function handleUpdatePhotos(hasPhotosValue) {
+    hasPictures.value = hasPhotosValue;
+  }
+
   function doneProgressOne(){
     axios.patch('/api/v1/projects/'+ houseCode.value, {progress : 1})
     .then(() => {
@@ -73,13 +116,13 @@
         <Head title="Quotation" /> 
         <BackBtn :houseId="houseId"></BackBtn>
         <div class="wrapper">
-            <button @click="toggleAddInstallerLightBox"> Add Installer </button>
+            <button @click="toggleAddInstallerLightBox" :class="{ 'hasUploaded': hasInstaller }"> Add Installer </button>
             <AddInstallerLightBox v-if="addInstallerLightBoxDisplay" @closeAddInstallerForm="closeAddInstallerForm" :houseCode="houseCode"></AddInstallerLightBox>
-            <button @click="toggleBasicInfoLightBox"> Fill Out Basic Information</button>
+            <button @click="toggleBasicInfoLightBox" :class="{ 'hasUploaded': hasInformatoin }"> Fill Out Basic Information</button>
             <BasicInfoLightBox v-if="basicInfoLightBoxDisplay" @closeBasicInfoLightBox="closeBasicInfoLightBox" :houseId="props.houseId" :houseCode="houseCode"></BasicInfoLightBox>
-            <button @click="toggleUploadPictureLightBox"> Upload Hand-Drawn Picture</button>
+            <button @click="toggleUploadPictureLightBox" :class="{ 'hasUploaded': hasPictures }"> Upload Hand-Drawn Picture</button>
             <UploadPictureLightBox v-if="uploadPictureLightBoxDisplay" @closeUploadPictureLightBox="closeUploadPictureLightBox" :houseId="props.houseId" :houseCode="houseCode"></UploadPictureLightBox>
-            <button @click="toggleUploadSolutionLightBox"> Upload Design Solution</button>
+            <button @click="toggleUploadSolutionLightBox" :class="{ 'hasUploaded' : hasSolution }"> Upload Design Solution</button>
             <UploadSolutionLightBox v-if="uploadSolutionLightBoxDisplay" @closeUploadSolutionLightBox="closeUploadSolutionLightBox" :houseId="props.houseId" :houseCode="houseCode"></UploadSolutionLightBox>
             <button @click="doneProgressOne">ALL COMPLETE</button>
         </div>
@@ -107,5 +150,8 @@ button{
 }
 button:hover{
     background-color: #c8d5dc;
+}
+.hasUploaded{
+  background-color: #a8cee0;
 }
 </style>

@@ -6,6 +6,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { defineEmits, defineProps, onMounted, ref } from 'vue';
 import axios from 'axios';
+import closeIcon from '/public/icons/close.svg'
 
 const emits = defineEmits(['closeForm']);
 const props = defineProps({
@@ -48,7 +49,7 @@ const submit = () => {
 <template>
     <div class="addUserWrapper"> 
         <div class="form">
-            <button class="closeBtn" @click="closeForm">X</button>
+            <button class="closeBtn" @click="closeForm"><img :src=closeIcon alt=""></button>
             <form @submit.prevent="submit">
                 <div>
                     <InputLabel for="name" value="Name" />
@@ -127,12 +128,7 @@ const submit = () => {
     position: absolute;
     right: 15px;
     top: 10px;
-    border: 1.5px solid black;
-    border-radius: 50%;
-    width: 23px;
-    height: 23px;
-    line-height: 21.5px;
-    font-size: 15px;
+    width: 26px;
 }
 
 form{

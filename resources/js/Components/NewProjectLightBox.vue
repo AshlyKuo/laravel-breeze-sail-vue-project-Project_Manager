@@ -1,6 +1,7 @@
 <script setup>
     import { defineEmits, ref } from 'vue';
     import axios from 'axios';
+    import closeIcon from '/public/icons/close.svg'
 
     const emits = defineEmits(['closeForm']);
     const closeForm = () => {
@@ -16,7 +17,9 @@
         sales: '',
         houseCode: '',
         houseId: '',
-        notes: ''
+        notes: '',
+        amounts: '',
+        currency: ''
     });
 
     async function submitForm() {
@@ -49,7 +52,7 @@
 <template>
     <div class="newProjectLightBox">
         <div class="form"> 
-            <button class="closeBtn" @click="closeForm">X</button>
+            <button class="closeBtn" @click="closeForm"><img :src=closeIcon alt=""></button>
             <h2>New Project</h2>
             <form action="">
                 <div>
@@ -83,6 +86,16 @@
                     </p>
                 </div>
                 <div>
+                    <p class="amounts"> 
+                        <label for="amounts">Amount:</label>
+                        <div class="amountsInput">
+                            <input type="number" id="amounts" v-model="form.amounts">
+                            <select name="currency" id="currency" v-model="form.currency">
+                                <option value="NTD">NTD</option>
+                                <option value="USD">USD</option>
+                            </select>
+                        </div>
+                    </p>
                     <p class="notes"> 
                         <label for="notes">Notes:</label>
                         <input type="text" id="notes" v-model="form.notes">
@@ -114,6 +127,7 @@
         height: 80%;
         background-color: white;
         padding: 30px;
+        border-radius: 10px;
     }
     h2{
         font-weight: bold;
@@ -124,12 +138,7 @@
         position: absolute;
         right: 15px;
         top: 10px;
-        border: 1.5px solid black;
-        border-radius: 50%;
-        width: 23px;
-        height: 23px;
-        line-height: 21.5px;
-        font-size: 15px;
+        width: 26px;
     }
     form{
         display: flex;
@@ -155,6 +164,15 @@
     input{
         background-color: #f0f5f8;
         border: none;
+        border-radius: 5px;
+    }
+    .amountsInput input{
+        width: 70%;
+    }
+    .amountsInput select{
+        border: none;
+        background-color: #f0f5f8;
+        width: 30%;
     }
     .sendBtn{
         background-color: #0096ff;
@@ -164,5 +182,6 @@
         height: 50px;
         position: absolute;
         bottom: 25px;
+        border-radius: 5px;
     }
 </style>

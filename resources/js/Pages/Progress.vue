@@ -125,7 +125,7 @@
     <AuthenticatedLayout>
         <Head title="Progress" />
 
-        <a class="backBtn" @click="goToProjects()"> < Back To Projects</a>
+        <a class="backBtn" @click="goToProjects()"> &lt; Back To Projects</a>
         <div  class="wrapper">
             <table>
                 <thead>
@@ -135,7 +135,7 @@
                         <th scope="col"  class="address">Address</th>
                         <th scope="col" class="customerName">Customer Name</th>
                         <th scope="col" class="progress">Progress</th>
-                        <th scope="col" class="status">Status</th>
+                        <!-- <th scope="col" class="status">Status</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -145,7 +145,7 @@
                         <th class="address">{{ data[0].address }}</th>
                         <th class="customerName">{{ data[0].client }}</th>
                         <th class="progress"><Progress :status="data[0].progress"></Progress></th>
-                        <th class="status"></th>
+                        <!-- <th class="status"></th> -->
                     </tr>
                 </tbody>
             </table>

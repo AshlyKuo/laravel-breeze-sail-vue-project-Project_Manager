@@ -59,7 +59,7 @@
     }
     .list{
         background-color: #fefeff;
-        width: 90%;
+        width: 95%;
         /* height: 80vh; */
         margin: 5px auto;
         box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);

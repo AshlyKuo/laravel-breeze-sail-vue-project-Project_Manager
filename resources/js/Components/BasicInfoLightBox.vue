@@ -1,6 +1,9 @@
 <script setup>
     import { ref, defineEmits, defineProps, onMounted } from 'vue';
     import axios from 'axios';
+    import editIcon from '/public/icons/edit.svg';
+    import minusIcon from '/public/icons/minus.svg';
+    import closeIcon from '/public/icons/close.svg'
 
     const emits = defineEmits(['closeBasicInfoLightBox']);
     const props = defineProps({
@@ -20,6 +23,62 @@
     });
 
     const savedRooms = ref([]);
+
+    const isEdit = ref(false);
+
+    function toggleSaveBtn(id){
+        isEdit.value = true;
+
+        let url = '/api/v1/rooms/' + id;
+
+        axios.get(url)
+        .then(response => {
+            console.log(response);
+            room.value.roomId = response.data.data.roomId;
+            room.value.name = response.data.data.name;
+            room.value.length = response.data.data.length;
+            room.value.width = response.data.data.width;
+            room.value.height = response.data.data.height;
+            room.value.outdoorPm25 = response.data.data.outdoorPm25;
+        })
+        .catch(error => {
+            console.error(error);
+        })
+
+    }
+
+    function editRoom(){
+        console.log(room.value.roomId);
+        let url = '/api/v1/rooms/' + room.value.roomId;
+
+        axios.patch(url, {
+            
+            name : room.value.name,
+            length : room.value.length,
+            width : room.value.width,
+            height : room.value.height,
+            outdoorPm25 : room.value.outdoorPm25
+            
+        })
+        .then(response => {
+            console.log(response);
+            room.value = { 
+                name: '',
+                length: '',
+                width: '',
+                height: '',
+                outdoorPm25: '',
+                houseId: props.houseId,
+                houseCode: props.houseCode,
+                roomId: '' 
+            }; // reset form
+
+            isEdit.value = false;
+        })
+        .catch(error => {
+            console.error(error);
+        })
+    }
 
     onMounted(() => {
         getRooms();
@@ -113,7 +172,7 @@
 <template>
     <div class="basicInfoLightBox">
         <div class="formContainer">
-            <button class="closeBtn" @click="closeBasicInfoLightBox">X</button>
+            <button class="closeBtn" @click="closeBasicInfoLightBox"><img :src=closeIcon alt=""></button>
             <div class="formInputs">
                 <h2>Fill out basic information</h2>
                 <div class="roomRow">
@@ -130,8 +189,9 @@
                     <label for="pm25">3. Outdoor Annual<br> Average PM2.5:</label>
                     <input type="number" id="pm25" v-model.number="room.outdoorPm25" placeholder="µg/m3" min="0">
                 </div>        
-                <button @click="saveRoom" class="saveBtn" type="button">Save</button>
-            </div>
+                <button @click="saveRoom" class="saveBtn" type="button" v-if="isEdit == false">Save</button>
+                <button @click="editRoom" class="saveBtn" type="button" v-if="isEdit == true">Save Change</button>
+            </div> 
       
             <div class="savedRooms">
                 <div class="lists">
@@ -139,7 +199,8 @@
                     <ul>
                     <li v-for="(savedRoom, index, ) in savedRooms" :key="savedRoom.id">
                         {{ index + 1 }}. {{ savedRoom.name }}
-                        <button class="deleteBtn" @click="deleteList( savedRoom.id )">-</button>
+                        <button class="deleteBtn" @click="deleteList( savedRoom.id )"><img :src=minusIcon alt="delete"></button>
+                        <button class="editBtn" @click="toggleSaveBtn( savedRoom.id )"><img :src=editIcon alt="edit"></button>
                     </li>
                     </ul>
                 </div>
@@ -177,12 +238,7 @@
     position: absolute;
     right: 15px;
     top: 10px;
-    border: 1.5px solid black;
-    border-radius: 50%;
-    width: 23px;
-    height: 23px;
-    line-height: 21.5px;
-    font-size: 15px;
+    width: 26px;
 }
 .formInputs{
     width: 55%;
@@ -267,15 +323,14 @@ ul {
     overflow-y: auto;
 }
 .deleteBtn{
-    display: block;
-    font-size: 27px;
-    line-height: 0px;
-    border-radius: 50%;
-    height: 20px;
-    width: 20px;
-    border: 1.9px solid black;
+    width: 18px;
     position: absolute;
     right:25px;
+}
+.editBtn{
+    position: absolute;
+    right:60px;
+    width: 20px;
 }
 .doneBtn{
     color: white;

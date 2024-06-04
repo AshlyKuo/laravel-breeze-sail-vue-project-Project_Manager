@@ -2,13 +2,24 @@
   import { ref, reactive, watch, computed, onMounted, onBeforeMount } from 'vue';
   import TableLite from 'vue3-table-lite';
   import NewProjectLightBox from './NewProjectLightBox.vue';
+  import ProjectEditLightBoxVue from './ProjectEditLightBox.vue';
 
   const searchTerm = ref("");
   const newProjectLightBoxDisplay = ref(false);
-  const isEditable = ref(true);
+  const editProjectLightBoxDisplay = ref(false);
+  const editHouseCode = ref();
   const props = defineProps({
     progressStatus: String,
     userRoles: Number,
+  });
+
+  onMounted(() => {
+    const elements = document.querySelectorAll('.vtl-table');
+
+    elements.forEach(element => {
+        element.classList.remove('vtl-table-responsive-sm', 'vtl-table-responsive');
+    });
+
   });
 
   watch(() => props.progressStatus, (newStatus, oldStatus) => {
@@ -17,7 +28,7 @@
         {
             label: "Date",
             field: "date",
-            width: "3%",
+            width: "10%",
             sortable: true,
         },
         {
@@ -35,7 +46,7 @@
         {
             label: "Sales",
             field: "sales",
-            width: "15%",
+            width: "10%",
             sortable: true,
         },
         {
@@ -47,13 +58,22 @@
         {
             label: "Amounts",
             field: "amounts",
-            width: "15%",
+            width: "10%",
             sortable: true,
+            display: function(row){
+                if(row.amounts){
+                    let formattedAmounts;
+                    formattedAmounts = row.amounts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    return(
+                        '<span>'+ formattedAmounts +'</span> <span>'+row.currency+'</span>'
+                    )  ; 
+                }
+            }
         },
         {
             label: "Progress",
             field: "currentProgress",
-            width: "15%",
+            width: "14%",
             sortable: false,
             display: function(row) {
                 let activeOne;
@@ -92,39 +112,53 @@
                     '<div class="flex flex-row progress"><span class="numSpan '+ activeOne +'">1</span><span class="numSpan '+ activeTwo +'">2</span><span class="numSpan '+ activeThree +'">3</span><span class="numSpan '+ activeFour +'">4</span><span class="numSpan '+ activeFive +'">5</span></div>'
                 );
             },
+
+        },
+        {
+            label: "",
+            field: "edit",
+            width: "7%",
+            display: function (row) {
+                return (
+                '<button type="button" data-id="' +
+                row.houseCode +
+                '" class="is-rows-el quick-btn editBtn">Edit</button>'
+                );
+            },
+ 
         },
         {
             label: "",
             field: "quick",
-            width: "10%",
+            width: "9%",
             display: function (row) {
                 let content;
                 if(props.userRoles == 2){
                     content = 'View >';
                 }else{
-                    content = 'Edit >';
+                    content = 'Progress >';
                 }
                 return (
                 '<button type="button" data-id="' +
                 row.houseId +
-                '" class="is-rows-el quick-btn editBtn">'+ content +'</button>'
+                '" class="is-rows-el quick-btn progressBtn">'+ content +'</button>'
                 );
             },
         },
+    ]
 
-        ]
     }else{
         table.columns = [
         {
             label: "Date",
             field: "date",
-            width: "3%",
+            width: "15%",
             sortable: true,
         },
         {
             label: "House Code",
             field: "houseCode",
-            width: "10%",
+            width: "15%",
             sortable: false,
         },
         {
@@ -150,6 +184,15 @@
             field: "amounts",
             width: "15%",
             sortable: true,
+            display: function(row){
+                if(row.amounts){
+                    let formattedAmounts;
+                    formattedAmounts = row.amounts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    return(
+                        '<span>'+ formattedAmounts +'</span> <span>'+row.currency+'</span>'
+                    )  ; 
+                }
+            }
         },
         // {
         //     label: "Client Satisfaction",
@@ -185,6 +228,7 @@
 
   function closeForm(value){
     newProjectLightBoxDisplay.value = value;
+    editProjectLightBoxDisplay.value = value;
   };
   
   const table = reactive({
@@ -194,7 +238,7 @@
         {
             label: "Date",
             field: "date",
-            width: "3%",
+            width: "10%",
             sortable: true,
         },
         {
@@ -212,7 +256,7 @@
         {
             label: "Sales",
             field: "sales",
-            width: "15%",
+            width: "10%",
             sortable: true,
         },
         {
@@ -224,13 +268,22 @@
         {
             label: "Amounts",
             field: "amounts",
-            width: "15%",
+            width: "10%",
             sortable: true,
+            display: function(row){
+                if(row.amounts){
+                    let formattedAmounts;
+                    formattedAmounts = row.amounts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    return(
+                        '<span>'+ formattedAmounts +'</span> <span>'+row.currency+'</span>'
+                    )  ; 
+                }
+            }
         },
         {
             label: "Progress",
             field: "currentProgress",
-            width: "15%",
+            width: "14%",
             sortable: false,
             display: function(row) {
                 let activeOne;
@@ -273,19 +326,32 @@
         },
         {
             label: "",
+            field: "edit",
+            width: "7%",
+            display: function (row) {
+                return (
+                '<button type="button" data-id="' +
+                row.houseCode +
+                '" class="is-rows-el quick-btn editBtn">Edit</button>'
+                );
+            },
+ 
+        },
+        {
+            label: "",
             field: "quick",
-            width: "10%",
+            width: "9%",
             display: function (row) {
                 let content;
                 if(props.userRoles == 2){
                     content = 'View >';
                 }else{
-                    content = 'Edit >';
+                    content = 'Progress >';
                 }
                 return (
                 '<button type="button" data-id="' +
                 row.houseId +
-                '" class="is-rows-el quick-btn editBtn">'+ content +'</button>'
+                '" class="is-rows-el quick-btn progressBtn">'+ content +'</button>'
                 );
             },
         },
@@ -340,16 +406,24 @@
     const tableLoadingFinish = (elements) => {
       table.isLoading = false;
       Array.prototype.forEach.call(elements, function (element) {
-        if (element.classList.contains("editBtn")) {
+        if (element.classList.contains("progressBtn")) {
           element.addEventListener("click", function () {
             const houseId = this.getAttribute('data-id');
             location.assign(`/project/${houseId}/progress`);
           });
         }
       });
+      Array.prototype.forEach.call(elements, function (element) {
+        if (element.classList.contains("editBtn")) {
+          element.addEventListener("click", function () {
+            editHouseCode.value = this.getAttribute('data-id');
+            editProjectLightBoxDisplay.value = true;
+          });
+        }
+      });
     };
 
-    watch([() => props.progressStatus, () => newProjectLightBoxDisplay.value, () => searchTerm.value ], () => {
+    watch([() => props.progressStatus, () => newProjectLightBoxDisplay.value, () => editProjectLightBoxDisplay.value ,() => searchTerm.value ], () => {
         doSearch(0, 10, 'id', 'desc');
     });
 
@@ -371,6 +445,7 @@
             <button @click="toggleLightBox" class="newProjectBtn" v-if="props.userRoles != 2">Add New Project</button>
         </div>
         <NewProjectLightBox v-if="newProjectLightBoxDisplay" @closeForm="closeForm"></NewProjectLightBox>
+        <ProjectEditLightBoxVue v-if="editProjectLightBoxDisplay" @closeForm="closeForm" :houseCode="editHouseCode"></ProjectEditLightBoxVue>
         <table-lite
             :is-slot-mode="true"
             :is-static-mode="true"

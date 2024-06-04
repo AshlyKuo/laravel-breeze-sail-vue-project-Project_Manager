@@ -1,6 +1,8 @@
 <script setup>
     import { ref, defineEmits, defineProps, onMounted } from 'vue';
     import axios from 'axios';
+    import closeIcon from '/public/icons/close.svg'
+    import minusIcon from '/public/icons/minus.svg';
 
     const emits = defineEmits(['closeUploadPictureLightBox']);
     const props = defineProps({
@@ -17,6 +19,7 @@
     });
     const savedPics = ref([]);
     const image = ref(null);
+    const fileInput = ref(null);
 
     function handleFileUpload(event) {
         // console.log(event.target.files[0]);
@@ -54,6 +57,11 @@
             houseCode: props.houseCode,
             type: 'H'
         };
+
+        if (fileInput.value) {
+            fileInput.value.value = '';
+        }
+        image.value = null;
 
     } catch (error) {
         console.error(error);
@@ -108,7 +116,7 @@
 <template>
     <div class="uploadPictureLightBox">
         <div class="formContainer">
-            <button class="closeBtn" @click="closeUploadPictureLightBox">X</button>
+            <button class="closeBtn" @click="closeUploadPictureLightBox"><img :src=closeIcon alt=""></button>
             <!-- 左側 -->
             <div class="formInputs">
                 <h2>Upload hand-drawn pictures</h2>
@@ -125,7 +133,7 @@
                             <div class="iconPlus">+</div>
                             Upload Photo
                         </label> -->
-                        <input id="fileUpload" type="file" accept="image/*" @change="handleFileUpload"/>
+                        <input id="fileUpload" type="file" accept="image/*" @change="handleFileUpload" ref="fileInput"/>
                     </div>   
                 </div>
                 <button @click="uploadPhoto" class="saveBtn">Save</button>
@@ -135,9 +143,9 @@
                 <div class="lists">
                     <h2>Saved Pictures</h2>
                     <ul>
-                    <li v-for="(savedPic, index) in savedPics" :key="savedPics.id">
+                    <li v-for="(savedPic, index) in savedPics" :key="savedPic.id">
                         {{ index + 1 }}.<img :src=savedPic.url>{{ savedPic.name }}
-                        <button class="deleteBtn" @click="deleteList(savedPic.url, savedPic.id)">-</button>
+                        <button class="deleteBtn" @click="deleteList(savedPic.url, savedPic.id)"><img :src=minusIcon alt="delete"></button>
                     </li>
                     </ul>
                 </div>
@@ -173,12 +181,7 @@
     position: absolute;
     right: 15px;
     top: 10px;
-    border: 1.5px solid black;
-    border-radius: 50%;
-    width: 23px;
-    height: 23px;
-    line-height: 21.5px;
-    font-size: 15px;
+    width: 26px;
 }
 
 .formInputs{
@@ -304,16 +307,11 @@ ul {
     height: 90%;
 }
 .deleteBtn{
-    display: block;
-    font-size: 27px;
-    line-height: 0px;
-    border-radius: 50%;
-    height: 20px;
-    width: 20px;
-    border: 1.9px solid black;
+    width: 18px;
     position: absolute;
-    right:25px;
+    right:45px;
 }
+
 .doneBtn{
     color: white;
     font-weight: bold;

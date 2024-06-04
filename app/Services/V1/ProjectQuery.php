@@ -18,10 +18,7 @@ class ProjectQuery {
         'progress' => ['=', '>', '<'],
         'completed' => ['='],
         'clientSatisfaction' => ['=', '>', '<'],
-        'zs2' => ['=', '>', '<'],
-        'ffu' => ['=', '>', '<'],
-        'zef' => ['=', '>', '<'],
-        'zrh' => ['=', '>', '<'],
+        'currency' => ['=']
     ];
 
     protected $columnMap = [

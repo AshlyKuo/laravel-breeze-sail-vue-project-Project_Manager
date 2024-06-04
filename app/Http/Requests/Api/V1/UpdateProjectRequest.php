@@ -37,6 +37,7 @@ class UpdateProjectRequest extends FormRequest
                 'completed' => ['sometimes', 'nullable'],
                 'clientSatisfaction' => ['sometimes', 'nullable'],
                 'notes' => ['sometimes', 'nullable'],
+                'currency' => ['sometimes', 'nullable']
             ];    
         }else{
             return [
@@ -56,6 +57,7 @@ class UpdateProjectRequest extends FormRequest
                 'zef' => ['sometimes', 'nullable'],
                 'zrh' => ['sometimes', 'nullable'],
                 'notes' => ['sometimes', 'nullable'],
+                'currency' => ['sometimes', 'nullable']
             ]; 
         }
     }

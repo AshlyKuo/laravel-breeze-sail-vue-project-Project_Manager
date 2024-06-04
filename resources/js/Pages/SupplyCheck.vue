@@ -17,6 +17,7 @@
   const ffuInStockNum = ref();
   const zefInStockNum = ref();
   const zrhInStockNum = ref();
+  const installer = ref();
 
   const requiredNum = reactive({
     zs2 : Number,
@@ -56,6 +57,7 @@
         requiredNum.ffu = response.data.data[0].ffu;
         requiredNum.zef = response.data.data[0].zef;
         requiredNum.zrh = response.data.data[0].zrh;
+        installer.value = response.data.data[0].installer;
     }catch(error){
         console.error(error);
     }
@@ -126,7 +128,7 @@
             </div>
             <div class="btns">
                 <button class="sendBtn" @click="toggleOrderRequestLightBox">Send Order Request</button>
-                <OrderRequestLightBox v-if="orderRequestLightBoxDisplay" @closeOrderRequestLightBox="closeOrderRequestLightBox"></OrderRequestLightBox>
+                <OrderRequestLightBox v-if="orderRequestLightBoxDisplay" @closeOrderRequestLightBox="closeOrderRequestLightBox" :installer="installer" :user="$page.props.auth.user.name"></OrderRequestLightBox>
                 <button class="confirmBtn" :class="confirmBtnDisabled? 'confirmBtnDisabled' : 'cofirmBtn'" :disabled="confirmBtnDisabled" @click="goToSupplyDoubleCheck(houseId)">Confirm</button>
             </div>
         </div>

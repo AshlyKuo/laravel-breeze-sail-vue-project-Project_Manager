@@ -1,6 +1,7 @@
 <script setup> 
     import { defineEmits, ref, defineProps, onMounted } from 'vue';
     import axios from 'axios';
+    import closeIcon from '/public/icons/close.svg'
 
     const emits = defineEmits(['closeAddInstallerForm']);
     const props = defineProps({
@@ -37,7 +38,7 @@
 <template>
     <div class="addInstallerLightBox">
         <div class="form">
-            <button class="closeBtn" @click="closeAddInstallerForm">X</button>
+            <button class="closeBtn" @click="closeAddInstallerForm"><img :src=closeIcon alt=""></button>
             <h2>Installer</h2>
             <form action="">
                 <div>
@@ -80,12 +81,7 @@
     position: absolute;
     right: 15px;
     top: 10px;
-    border: 1.5px solid black;
-    border-radius: 50%;
-    width: 23px;
-    height: 23px;
-    line-height: 21.5px;
-    font-size: 15px;
+    width: 26px;
 }
 form{
     height: 70%;

@@ -1,13 +1,17 @@
 <script setup>
-    import { defineEmits, defineProps, ref } from 'vue'; 
+    import { defineEmits, defineProps, ref, onMounted } from 'vue'; 
+    import closeIcon from '/public/icons/close.svg'
 
     const emits = defineEmits(['closeOrderRequestLightBox']);
+    const props = defineProps({
+        installer: String,
+        user: String
+    });
     const deviceType = ref('');
     const numDevices = ref(0);
     const dateRequired = ref('');
     const notes = ref('');
     const sales = ref('');
-
 
     const closeOrderRequestLightBox = () => {
         emits('closeOrderRequestLightBox', false);
@@ -18,29 +22,38 @@
         const content = `
             <html>
                 <head>
-                    <title>Order Request</title>
                     <style>
+                    body { font-family: Arial, sans-serif; }
+                    .order-request { max-width: 600px; margin: auto; padding: 20px; }
+                    .order-request h2 { text-align: center; }
+                    .order-request p { margin: 5px 0; }
+                    img { max-width: 25%; height: auto; display: block; margin: auto; }
                     </style>
                 </head>
                 <body>
-                    <h2>Order Request</h2>
-                    <p>Device Type: ${deviceType.value}</p>
-                    <p>Number of Devices Required: ${numDevices.value}</p>
-                    <p>Date Required: ${dateRequired.value}</p>
-                    <p>Sales: ${sales.value}
-                    <p>Notes: ${notes.value}</p>
+                    <div>
+                        <img src="/images/ZAP_bg.png" alt="Order Image" onload="window.print(); window.close();">
+                        <h2>Order Request</h2>
+                        <p><b>Device Type:</b> ${deviceType.value}</p>
+                        <p><b>Number of Devices Required:</b> ${numDevices.value}</p>
+                        <p><b>Date Required:</b> ${dateRequired.value}</p>
+                        <p><b>Sales:</b> ${sales.value}</p>
+                        <p><b>Installer:</b> ${props.installer}</p>
+                        <p><b>User:</b> ${props.user}</p>
+                        <p><b>Notes:</b> ${notes.value}</p>
+                    </div>
                 </body>
             </html>
         `;
         printWindow.document.write(content);
-        printWindow.print();
+        // printWindow.print();
         printWindow.document.close();
     };
 </script>
 <template>
     <div class="orderRequestLightBox">
         <div class="formInputs">
-            <button class="closeBtn" @click="closeOrderRequestLightBox">X</button>
+            <button class="closeBtn" @click="closeOrderRequestLightBox"><img :src=closeIcon alt=""></button>
 
             <h2>Order Request</h2>
             <form action="">
@@ -92,12 +105,7 @@
     position: absolute;
     right: 15px;
     top: 10px;
-    border: 1.5px solid black;
-    border-radius: 50%;
-    width: 23px;
-    height: 23px;
-    line-height: 21.5px;
-    font-size: 15px;
+    width: 26px;
 }
 h2{
     padding-bottom: 10px;
