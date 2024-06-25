@@ -1,5 +1,5 @@
 <script setup>
-  import { defineProps, onBeforeMount, ref, onMounted } from 'vue';
+  import { defineProps, onBeforeMount, ref, watch } from 'vue';
   import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
   import axios from 'axios';
   import AddInstallerLightBox from '@/Components/AddInstallerLightBox.vue';
@@ -25,7 +25,7 @@
   const hasInformatoin = ref(false);
   const hasSolution = ref(false);
 
-  onBeforeMount(() => {
+  const fetchData = () => {
     let url = '/api/v1/projects?houseId='+ props.houseId.toString();
     axios.get(url)
     .then((response) => {   
@@ -64,6 +64,15 @@
       console.log(error);
     })
 
+
+  };
+
+  onBeforeMount(() => {
+    fetchData();
+  });
+
+  watch([addInstallerLightBoxDisplay, basicInfoLightBoxDisplay, uploadPictureLightBoxDisplay, uploadSolutionLightBoxDisplay], () => {
+    fetchData();
   });
 
   function toggleAddInstallerLightBox(){

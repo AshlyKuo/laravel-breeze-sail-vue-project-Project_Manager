@@ -20,7 +20,7 @@
     });
 
     function toggleLightBox(){
-        newUsertLightBoxDisplay.value = ! newUsertLightBoxDisplay.value;
+        newUsertLightBoxDisplay.value = true;
     };
 
     function closeForm(value){
@@ -163,7 +163,7 @@
     };
 
 
-    watch( () => searchTerm.value , () => {
+    watch( [searchTerm, newUsertLightBoxDisplay, userEditLightBoxDisplay] , () => {
         doSearch(0, 10, 'id', 'desc');
     });
 

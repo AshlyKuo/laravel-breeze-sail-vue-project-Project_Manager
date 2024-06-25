@@ -119,11 +119,13 @@
             field: "edit",
             width: "7%",
             display: function (row) {
-                return (
-                '<button type="button" data-id="' +
-                row.houseCode +
-                '" class="is-rows-el quick-btn editBtn">Edit</button>'
-                );
+                if(props.userRoles != 2){
+                    return (
+                        '<button type="button" data-id="' +
+                        row.houseCode +
+                        '" class="is-rows-el quick-btn editBtn">Edit</button>'
+                    );
+                }
             },
  
         },
@@ -213,7 +215,7 @@
                 return (
                 '<button type="button" data-id="' +
                 row.houseId +
-                '" class="is-rows-el quick-btn editBtn">View > </button>'
+                '" class="is-rows-el quick-btn progressBtn">View > </button>'
                 );
             },
         },
@@ -329,11 +331,13 @@
             field: "edit",
             width: "7%",
             display: function (row) {
-                return (
-                '<button type="button" data-id="' +
-                row.houseCode +
-                '" class="is-rows-el quick-btn editBtn">Edit</button>'
-                );
+                if(props.userRoles != 2){
+                    return (
+                        '<button type="button" data-id="' +
+                        row.houseCode +
+                        '" class="is-rows-el quick-btn editBtn">Edit</button>'
+                    );
+                }
             },
  
         },

@@ -86,16 +86,15 @@
                     });
                     pic.value.url = 'https://s3.ap-northeast-1.amazonaws.com/s3.zap/' + uploadResponse.data.path;
 
-                    console.log(picId.value);
-
                     await axios.patch('/api/v1/pictures/' + picId.value , {url: pic.value.url})
-                    .then(() => {
-                        filename.value = '';
-                        fileUrl.value = '';
-                    })
+                    .then(() => {})
                     .catch(error => {
                         console.log(error.response);
                     } )
+
+                    filename.value = '';
+                    fileUrl.value = '';
+
                     return;
 
                 }else{

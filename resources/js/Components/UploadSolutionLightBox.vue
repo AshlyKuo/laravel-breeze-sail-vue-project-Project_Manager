@@ -19,6 +19,7 @@
     });
     const savedPics = ref([]);
     const image = ref(null);
+    const fileInput = ref(null);
 
     function handleFileUpload(event) {
         // console.log(event.target.files[0]);
@@ -56,6 +57,11 @@
             houseCode: props.houseCode,
             type: 'D'
         };
+
+        if (fileInput.value) {
+            fileInput.value.value = '';
+        }
+        image.value = null;
 
     } catch (error) {
         console.error(error);
@@ -127,7 +133,7 @@
                             <div class="iconPlus">+</div>
                             Upload Photo
                         </label> -->
-                        <input id="fileUpload" type="file" accept="image/*" @change="handleFileUpload"/>
+                        <input id="fileUpload" type="file" accept="image/*" @change="handleFileUpload" ref="fileInput" />
                     </div>   
                 </div>
                 <button @click="uploadPhoto" class="saveBtn">Save</button>
@@ -137,7 +143,7 @@
                 <div class="lists">
                     <h2>Saved Pictures</h2>
                     <ul>
-                    <li v-for="(savedPic, index) in savedPics" :key="savedPics.id">
+                    <li v-for="(savedPic, index) in savedPics" :key="savedPic.id">
                         {{ index + 1 }}.<img :src=savedPic.url>{{ savedPic.name }}
                         <button class="deleteBtn" @click="deleteList(savedPic.url, savedPic.id)"><img :src=minusIcon alt="delete"></button>
                     </li>

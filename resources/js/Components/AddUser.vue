@@ -36,18 +36,13 @@ const submit = () => {
 
         form.user_roles = Number(form.user_roles);
     }
-    console.log(form);
 
     form.post(route('addUser'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+        onFinish: () => {
+            form.reset('name', 'email', 'user_roles', 'password', 'password_confirmation');
+            emits('closeForm', false);
+        },
     });
-
-    emits('closeForm', false);
-
-    form.name = '';
-    form.email = '';
-    form.user_roles = '';
-
 };
 
 

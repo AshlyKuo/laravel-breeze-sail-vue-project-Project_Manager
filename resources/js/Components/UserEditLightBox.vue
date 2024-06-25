@@ -39,8 +39,10 @@ async function getInfo(){
 }
 
 const submit = () => {
-    axios.patch('/api/v1/users/'+ props.userId, form);
-    emits('closeForm', false);
+    axios.patch('/api/v1/users/'+ props.userId, form)
+    .then(()=>{
+        emits('closeForm', false);
+    }); 
 };
 
 
